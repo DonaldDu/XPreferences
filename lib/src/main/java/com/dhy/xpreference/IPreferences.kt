@@ -32,9 +32,8 @@ interface IPreferences {
     }
 
     private fun getConverter(context: Context): ObjectConverter {
-        val c = if (context is XPreferencesSetting) context else context.applicationContext
-        val setting = c as XPreferencesSetting
-        return setting.getPreferencesConverter()
+        if (PreferencesSetting.converter == null) PreferencesSetting.init(context)
+        return PreferencesSetting.converter
     }
 
     fun getString(context: Context, key: String, isStatic: Boolean = false): String?

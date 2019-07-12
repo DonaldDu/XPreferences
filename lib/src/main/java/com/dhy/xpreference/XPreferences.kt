@@ -33,10 +33,7 @@ object XPreferences : IPreferences {
     }
 
     private fun getPreferences(context: Context, isStatic: Boolean): IPreferences {
-        val c = if (context is XPreferencesSetting) context else context.applicationContext
-        val settting = c as? XPreferencesSetting
-            ?: throw IllegalStateException("context or application must implements XPreferencesSetting")
-        val generator = settting.getPreferencesGenerator()
+        val generator = getGenerator(context)
         return if (isStatic) {
             if (context.hasFilePermission()) StaticPreferences(generator)
             else {
@@ -46,6 +43,11 @@ object XPreferences : IPreferences {
                 InnerPreferences(generator)
             }
         } else InnerPreferences(generator)
+    }
+
+    private fun getGenerator(context: Context): IPreferenceFileNameGenerator {
+        if (PreferencesSetting.generator == null) PreferencesSetting.init(context)
+        return PreferencesSetting.generator
     }
 }
 
