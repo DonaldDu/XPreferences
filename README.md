@@ -3,9 +3,6 @@
 #### 介绍
 Android存储SharedPreferences数据工具类，支持存储到SD卡，支持多用户。
 
-#### 软件架构
-软件架构说明
-
 ```
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
