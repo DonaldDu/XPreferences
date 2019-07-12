@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 
-class InnerPreferences : IPreferences {
+class InnerPreferences(private val generator: IPreferenceFileNameGenerator) : IPreferences {
     override fun putString(context: Context, key: String, obj: String?, isStatic: Boolean) {
         if (obj != null) {
             getSharedPreferences(context, key).edit().apply {
@@ -21,7 +21,7 @@ class InnerPreferences : IPreferences {
     }
 
     private fun getSharedPreferences(context: Context, key: String): SharedPreferences {
-        val preferencesName = XPreferencesSetting.generator.generate(key)
+        val preferencesName = generator.generate(context, key)
         return context.getSharedPreferences(preferencesName, Activity.MODE_PRIVATE)
     }
 }

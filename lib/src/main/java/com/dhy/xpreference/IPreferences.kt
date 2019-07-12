@@ -17,7 +17,7 @@ interface IPreferences {
 
     fun put(context: Context, key: String, obj: Any?, isStatic: Boolean = false) {
         val json = if (obj != null) {
-            XPreferencesSetting.converter.objectToString(obj)
+            getConverter(context).objectToString(obj)
         } else null
         putString(context, key, json, isStatic)
     }
@@ -27,8 +27,14 @@ interface IPreferences {
     fun <T> get(context: Context, key: String, cls: Class<T>, isStatic: Boolean = false): T? {
         val json = getString(context, key, isStatic)
         return if (json != null) {
-            XPreferencesSetting.converter.string2object(json, cls)
+            getConverter(context).string2object(json, cls)
         } else null
+    }
+
+    private fun getConverter(context: Context): ObjectConverter {
+        val c = if (context is XPreferencesSetting) context else context.applicationContext
+        val setting = c as XPreferencesSetting
+        return setting.getPreferencesConverter()
     }
 
     fun getString(context: Context, key: String, isStatic: Boolean = false): String?

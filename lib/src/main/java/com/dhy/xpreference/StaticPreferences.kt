@@ -7,7 +7,7 @@ import org.json.JSONObject
 import java.io.File
 import java.nio.charset.Charset
 
-class StaticPreferences : IPreferences {
+class StaticPreferences(private val generator: IPreferenceFileNameGenerator) : IPreferences {
     override fun putString(context: Context, key: String, obj: String?, isStatic: Boolean) {
         val file = getPrefsFile(context, key)
         if (obj != null) {
@@ -33,7 +33,7 @@ class StaticPreferences : IPreferences {
 
     private fun getPrefsFile(context: Context, key: String): File {
         val root = context.staticDirectory
-        val preferencesName = XPreferencesSetting.generator.generate(key)
+        val preferencesName = generator.generate(context, key)
         val file = File(root, "prefs" + File.separator + preferencesName)
         file.parentFile.apply {
             if (!exists()) mkdirs()

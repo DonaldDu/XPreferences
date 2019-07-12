@@ -11,7 +11,19 @@ import android.util.Log
 import android.widget.Toast
 import java.io.File
 
-object XPreferences : XPreferencesSetting(), IPreferences {
+object XPreferences : IPreferences {
+    inline fun <reified T> get(context: Context, isStatic: Boolean = false): T? {
+        return get(context, T::class.java.name, T::class.java, isStatic)
+    }
+
+    inline fun <reified T> get(context: Context, key: Enum<*>, isStatic: Boolean = false): T? {
+        return get(context, key.keyName(), T::class.java, isStatic)
+    }
+
+    inline fun <reified T> get(context: Context, key: String, isStatic: Boolean = false): T? {
+        return get(context, key, T::class.java, isStatic)
+    }
+
     override fun putString(context: Context, key: String, obj: String?, isStatic: Boolean) {
         getPreferences(context, isStatic).putString(context, key, obj, isStatic)
     }
@@ -21,27 +33,19 @@ object XPreferences : XPreferencesSetting(), IPreferences {
     }
 
     private fun getPreferences(context: Context, isStatic: Boolean): IPreferences {
+        val c = if (context is XPreferencesSetting) context else context.applicationContext
+        val settting = c as? XPreferencesSetting
+            ?: throw IllegalStateException("context or application must implements XPreferencesSetting")
+        val generator = settting.getPreferencesGenerator()
         return if (isStatic) {
-            if (context.hasFilePermission()) StaticPreferences()
+            if (context.hasFilePermission()) StaticPreferences(generator)
             else {
                 val msg = "no file permissions for static preferences"
                 Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                 Log.e("XPreferences", msg)
-                InnerPreferences()
+                InnerPreferences(generator)
             }
-        } else InnerPreferences()
-    }
-
-    inline fun <reified T> get(context: Context, isStatic: Boolean = false): T? {
-        return get(context, T::class.java.name, T::class.java, isStatic)
-    }
-
-    inline fun <reified T> get(context: Context, key: String, isStatic: Boolean = false): T? {
-        return get(context, key, T::class.java, isStatic)
-    }
-
-    inline fun <reified T> get(context: Context, key: Enum<*>, isStatic: Boolean = false): T? {
-        return get(context, key.keyName(), T::class.java, isStatic)
+        } else InnerPreferences(generator)
     }
 }
 
