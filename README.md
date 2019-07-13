@@ -1,6 +1,5 @@
 # XPreferences
 
-#### 介绍
 Android存储SharedPreferences数据工具类，支持存储到SD卡，支持多用户。
 
 ```
