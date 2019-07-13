@@ -1,6 +1,6 @@
 # XPreferences [![](https://jitpack.io/v/DonaldDu/XPreferences.svg)](https://jitpack.io/#DonaldDu/XPreferences)
 
-Android存储SharedPreferences数据工具类，支持存储到SD卡，支持多用户。
+Android SharedPreferences工具类，支持存储到SD卡，支持多用户。
 
 ```
     override fun onCreate(savedInstanceState: Bundle?) {
