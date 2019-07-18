@@ -1,4 +1,4 @@
-package com.dhy.xpreference
+package com.dhy.xpreference.util
 
 import android.content.Context
 

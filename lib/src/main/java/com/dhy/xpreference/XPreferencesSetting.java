@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.dhy.xpreference.util.GsonConverter;
+import com.dhy.xpreference.util.IPreferenceFileNameGenerator;
+import com.dhy.xpreference.util.ObjectConverter;
+import com.dhy.xpreference.util.PreferenceFileNameGenerator;
 
 import java.lang.reflect.Constructor;
 
@@ -29,17 +33,22 @@ public class XPreferencesSetting {
         XPreferencesSetting.generator = (IPreferenceFileNameGenerator) load(context, generator.getName());
     }
 
+    private static SharedPreferences getSharedPreferences(Context context) {
+        String fileName = XPreferencesSetting.class.getName();
+        return context.getSharedPreferences(fileName, Activity.MODE_PRIVATE);
+    }
+
     private static <T> void saveUtilClassName(Context context, Class<T> utilInterface, Class<? extends T> util) {
-        String key = XPreferencesSetting.class.getName();
-        SharedPreferences preferences = context.getSharedPreferences(key, Activity.MODE_PRIVATE);
-        preferences.edit().putString(utilInterface.getName(), util.getName()).apply();
+        getSharedPreferences(context)
+                .edit()
+                .putString(utilInterface.getName(), util.getName())
+                .apply();
     }
 
     @Nullable
     private static String getUtilClassName(Context context, Class utilInterface) {
-        String key = XPreferencesSetting.class.getName();
-        SharedPreferences preferences = context.getSharedPreferences(key, Activity.MODE_PRIVATE);
-        return preferences.getString(utilInterface.getName(), null);
+        return getSharedPreferences(context)
+                .getString(utilInterface.getName(), null);
     }
 
     static void init(Context context) {

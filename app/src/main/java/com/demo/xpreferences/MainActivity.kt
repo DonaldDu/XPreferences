@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun AppSettings.show() {
+    private fun AppSettings.show() {
         val new = System.currentTimeMillis()
         tv.text = "old $startDate, new $new"
         startDate = new

@@ -1,17 +1,12 @@
 package com.dhy.xpreference
 
-import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Environment
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
-import com.dhy.xpreference.util.InnerPreferences
-import com.dhy.xpreference.util.StaticPreferences
-import java.io.File
+import com.dhy.xpreference.preferences.InnerPreferences
+import com.dhy.xpreference.preferences.StaticPreferences
+import com.dhy.xpreference.util.IPreferenceFileNameGenerator
+import com.dhy.xpreference.util.ObjectConverter
 
 object XPreferences : IPreferences {
     inline fun <reified T> get(context: Context, isStatic: Boolean = false): T? {
@@ -87,39 +82,9 @@ interface IPreferences {
     }
 
     private fun getConverter(context: Context): ObjectConverter {
-        if (PreferencesSetting.converter == null) PreferencesSetting.init(context)
-        return PreferencesSetting.converter
+        if (XPreferencesSetting.converter == null) XPreferencesSetting.init(context)
+        return XPreferencesSetting.converter
     }
 
     fun getString(context: Context, key: String, isStatic: Boolean = false): String?
 }
-
-val FILE_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-    arrayOf(
-        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        android.Manifest.permission.READ_EXTERNAL_STORAGE
-    )
-} else {
-    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-}
-
-fun Enum<*>.keyName(): String {
-    return "${javaClass.name}_$name"
-}
-
-fun Context.hasFilePermission(): Boolean {
-    return FILE_PERMISSIONS.find {
-        ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-    } == null
-}
-
-fun Activity.requestFilePermission(requestCode: Int = 1) {
-    if (hasFilePermission()) return
-    ActivityCompat.requestPermissions(this, FILE_PERMISSIONS, requestCode)
-}
-
-val Context.staticDirectory: File
-    get() {
-        val sdcard = Environment.getExternalStorageDirectory()
-        return File(sdcard, "Android/static/$packageName")
-    }

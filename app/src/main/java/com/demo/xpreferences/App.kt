@@ -2,9 +2,9 @@ package com.demo.xpreferences
 
 import android.app.Application
 import android.content.Context
-import com.dhy.xpreference.GsonConverter
-import com.dhy.xpreference.IPreferenceFileNameGenerator
 import com.dhy.xpreference.XPreferencesSetting
+import com.dhy.xpreference.util.GsonConverter
+import com.dhy.xpreference.util.IPreferenceFileNameGenerator
 
 class App : Application() {
     var userId: Int = 0

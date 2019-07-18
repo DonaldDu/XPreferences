@@ -1,10 +1,10 @@
-package com.dhy.xpreference.util
+package com.dhy.xpreference.preferences
 
 import android.content.Context
 import android.text.TextUtils
-import com.dhy.xpreference.IPreferenceFileNameGenerator
 import com.dhy.xpreference.IPreferences
 import com.dhy.xpreference.staticDirectory
+import com.dhy.xpreference.util.IPreferenceFileNameGenerator
 import org.apache.commons.io.FileUtils
 import org.json.JSONObject
 import java.io.File
