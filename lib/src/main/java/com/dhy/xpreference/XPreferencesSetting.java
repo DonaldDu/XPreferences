@@ -1,0 +1,71 @@
+package com.dhy.xpreference;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.lang.reflect.Constructor;
+
+public class XPreferencesSetting {
+    static ObjectConverter converter;
+    static IPreferenceFileNameGenerator generator;
+
+    /**
+     * @param converter we'll get instance with class.newInstance()
+     */
+    public static void setConverter(Context context, Class<? extends ObjectConverter> converter) {
+        saveUtilClassName(context, ObjectConverter.class, converter);
+        XPreferencesSetting.converter = (ObjectConverter) load(context, converter.getName());
+        XPreferencesSetting.converter.init(context);
+    }
+
+    /**
+     * @param generator we'll get instance with class.newInstance()
+     */
+    public static void setGenerator(Context context, Class<? extends IPreferenceFileNameGenerator> generator) {
+        saveUtilClassName(context, IPreferenceFileNameGenerator.class, generator);
+        XPreferencesSetting.generator = (IPreferenceFileNameGenerator) load(context, generator.getName());
+    }
+
+    private static <T> void saveUtilClassName(Context context, Class<T> utilInterface, Class<? extends T> util) {
+        String key = XPreferencesSetting.class.getName();
+        SharedPreferences preferences = context.getSharedPreferences(key, Activity.MODE_PRIVATE);
+        preferences.edit().putString(utilInterface.getName(), util.getName()).apply();
+    }
+
+    @Nullable
+    private static String getUtilClassName(Context context, Class utilInterface) {
+        String key = XPreferencesSetting.class.getName();
+        SharedPreferences preferences = context.getSharedPreferences(key, Activity.MODE_PRIVATE);
+        return preferences.getString(utilInterface.getName(), null);
+    }
+
+    static void init(Context context) {
+        if (converter == null || generator == null) {
+            if (converter == null) {
+                String className = getUtilClassName(context, ObjectConverter.class);
+                if (className == null) className = GsonConverter.class.getName();
+                converter = (ObjectConverter) load(context, className);
+                converter.init(context);
+            }
+            if (generator == null) {
+                String className = getUtilClassName(context, IPreferenceFileNameGenerator.class);
+                if (className == null) className = PreferenceFileNameGenerator.class.getName();
+                generator = (IPreferenceFileNameGenerator) load(context, className);
+            }
+        }
+    }
+
+    private static Object load(Context context, @NonNull String className) {
+        try {
+            Class<?> cls = context.getClassLoader().loadClass(className);
+            Constructor<?> constructor = cls.getConstructor();
+            if (!constructor.isAccessible()) constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+}

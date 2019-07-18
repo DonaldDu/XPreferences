@@ -48,8 +48,8 @@ object XPreferences : IPreferences {
     }
 
     private fun getGenerator(context: Context): IPreferenceFileNameGenerator {
-        if (PreferencesSetting.generator == null) PreferencesSetting.init(context)
-        return PreferencesSetting.generator
+        if (XPreferencesSetting.generator == null) XPreferencesSetting.init(context)
+        return XPreferencesSetting.generator
     }
 }
 
