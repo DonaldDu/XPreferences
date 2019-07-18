@@ -1,10 +1,7 @@
-package com.dhy.xpreference
+package com.dhy.xpreference.util
 
+import com.dhy.xpreference.ObjectConverter
 import com.google.gson.Gson
-import org.json.JSONArray
-import org.json.JSONException
-
-import java.util.ArrayList
 
 class GsonConverter @JvmOverloads constructor(gson: Gson? = null) : ObjectConverter {
     private val gson: Gson = gson ?: Gson()

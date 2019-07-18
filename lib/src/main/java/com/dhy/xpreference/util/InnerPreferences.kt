@@ -1,10 +1,13 @@
-package com.dhy.xpreference
+package com.dhy.xpreference.util
 
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import com.dhy.xpreference.IPreferenceFileNameGenerator
+import com.dhy.xpreference.IPreferences
 
-class InnerPreferences(private val generator: IPreferenceFileNameGenerator) : IPreferences {
+class InnerPreferences(private val generator: IPreferenceFileNameGenerator) :
+    IPreferences {
     override fun putString(context: Context, key: String, obj: String?, isStatic: Boolean) {
         if (obj != null) {
             getSharedPreferences(context, key).edit().apply {

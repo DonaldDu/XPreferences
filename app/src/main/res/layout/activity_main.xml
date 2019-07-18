@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <TextView
-            android:id="@+id/tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"/>
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!" />
+
     <Button
-            android:id="@+id/tvStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test Static"/>
+        android:id="@+id/buttonInner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test inner" />
+
     <Button
-            android:id="@+id/tvReq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="request File Permission"/>
+        android:id="@+id/buttonStatic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test Static" />
+
+    <Button
+        android:id="@+id/buttonSingleInstance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test Single Instance" />
+
+    <Button
+        android:id="@+id/buttonReq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="request File Permission" />
 
 </LinearLayout>

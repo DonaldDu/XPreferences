@@ -12,21 +12,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val settings: AppSettings = XPreferences.get(this) ?: AppSettings()//读取配置
-        tv.text = "startDate ${settings.startDate}"
-
-        settings.startDate = System.currentTimeMillis()
-        XPreferences.put(this, settings)//存储配置
-
-        tvStatic.setOnClickListener {
-            val s: AppSettings = XPreferences.get(this, true) ?: AppSettings()//读取SD卡配置
-            tv.text = "startDate ${s.startDate}"
-            s.startDate = System.currentTimeMillis()
-            XPreferences.put(this, s, true)//存储配置到SD卡
+        buttonInner.setOnClickListener {
+            val settings: AppSettings = XPreferences.get(this) ?: AppSettings()//读取配置
+            settings.show()
+            XPreferences.put(this, settings)//存储配置
         }
 
-        tvReq.setOnClickListener {
+        buttonStatic.setOnClickListener {
+            val settings: AppSettings = XPreferences.get(this, true) ?: AppSettings()//读取SD卡配置
+            settings.show()
+            XPreferences.put(this, settings, true)//存储配置到SD卡
+        }
+
+        buttonSingleInstance.setOnClickListener {
+            val settings = AppSettings.getInstance(this)
+            settings.show()
+            settings.save(this)
+        }
+        buttonReq.setOnClickListener {
             requestFilePermission()
         }
+    }
+
+    fun AppSettings.show() {
+        val new = System.currentTimeMillis()
+        tv.text = "old $startDate, new $new"
+        startDate = new
     }
 }

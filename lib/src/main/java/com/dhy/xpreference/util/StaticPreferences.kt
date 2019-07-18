@@ -1,13 +1,17 @@
-package com.dhy.xpreference
+package com.dhy.xpreference.util
 
 import android.content.Context
 import android.text.TextUtils
+import com.dhy.xpreference.IPreferenceFileNameGenerator
+import com.dhy.xpreference.IPreferences
+import com.dhy.xpreference.staticDirectory
 import org.apache.commons.io.FileUtils
 import org.json.JSONObject
 import java.io.File
 import java.nio.charset.Charset
 
-class StaticPreferences(private val generator: IPreferenceFileNameGenerator) : IPreferences {
+class StaticPreferences(private val generator: IPreferenceFileNameGenerator) :
+    IPreferences {
     override fun putString(context: Context, key: String, obj: String?, isStatic: Boolean) {
         val file = getPrefsFile(context, key)
         if (obj != null) {

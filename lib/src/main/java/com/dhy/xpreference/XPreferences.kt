@@ -9,6 +9,8 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
+import com.dhy.xpreference.util.InnerPreferences
+import com.dhy.xpreference.util.StaticPreferences
 import java.io.File
 
 object XPreferences : IPreferences {
@@ -51,6 +53,47 @@ object XPreferences : IPreferences {
     }
 }
 
+interface IPreferences {
+    fun put(context: Context, obj: Any, isStatic: Boolean = false) {
+        put(context, obj::class.java.name, obj, isStatic)
+    }
+
+    fun put(context: Context, key: Class<*>, obj: Any?, isStatic: Boolean = false) {
+        put(context, key.name, obj, isStatic)
+    }
+
+    fun put(context: Context, key: Enum<*>, obj: Any?, isStatic: Boolean = false) {
+        put(context, key.keyName(), obj, isStatic)
+    }
+
+    fun put(context: Context, key: String, obj: Any?, isStatic: Boolean = false) {
+        val json = if (obj != null) {
+            getConverter(context).objectToString(obj)
+        } else null
+        putString(context, key, json, isStatic)
+    }
+
+    fun putString(context: Context, key: String, obj: String?, isStatic: Boolean = false)
+
+    fun <T> get(context: Context, cls: Class<T>, isStatic: Boolean = false): T? {
+        return get(context, cls.name, cls, isStatic)
+    }
+
+    fun <T> get(context: Context, key: String, cls: Class<T>, isStatic: Boolean = false): T? {
+        val json = getString(context, key, isStatic)
+        return if (json != null) {
+            getConverter(context).string2object(json, cls)
+        } else null
+    }
+
+    private fun getConverter(context: Context): ObjectConverter {
+        if (PreferencesSetting.converter == null) PreferencesSetting.init(context)
+        return PreferencesSetting.converter
+    }
+
+    fun getString(context: Context, key: String, isStatic: Boolean = false): String?
+}
+
 val FILE_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
     arrayOf(
         android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -58,6 +101,10 @@ val FILE_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BE
     )
 } else {
     arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+}
+
+fun Enum<*>.keyName(): String {
+    return "${javaClass.name}_$name"
 }
 
 fun Context.hasFilePermission(): Boolean {
