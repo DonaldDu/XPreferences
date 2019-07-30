@@ -1,10 +1,14 @@
 package com.demo.xpreferences
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.dhy.xpreference.SingleInstance
 import com.dhy.xpreference.XPreferences
 import com.dhy.xpreference.requestFilePermission
+import com.dhy.xpreference.util.StaticPref
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,5 +42,16 @@ class MainActivity : AppCompatActivity() {
         val new = System.currentTimeMillis()
         tv.text = "old $startDate, new $new"
         startDate = new
+    }
+
+    @StaticPref
+    private class AppSettings : SingleInstance(), Serializable {
+        var startDate: Long? = null
+
+        companion object {
+            fun getInstance(context: Context): AppSettings {
+                return getInstance(context, AppSettings::class.java)
+            }
+        }
     }
 }

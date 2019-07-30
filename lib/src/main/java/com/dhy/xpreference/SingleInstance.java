@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import com.dhy.xpreference.util.StaticPref;
 
+import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -17,7 +18,9 @@ public abstract class SingleInstance {
             instance = XPreferences.INSTANCE.get(context, cls, isStatic(cls));
             if (instance == null) {
                 try {
-                    instance = cls.newInstance();
+                    Constructor<T> constructor = cls.getConstructor();
+                    if (!constructor.isAccessible()) constructor.setAccessible(true);
+                    instance = constructor.newInstance();
                 } catch (Exception e) {
                     throw new IllegalStateException("SingleInstance newInstance error: " + cls.getName(), e);
                 }
