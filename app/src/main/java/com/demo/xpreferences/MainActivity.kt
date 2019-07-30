@@ -1,6 +1,5 @@
 package com.demo.xpreferences
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.dhy.xpreference.SingleInstance
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonSingleInstance.setOnClickListener {
-            val settings = AppSettings.getInstance(this)
+            val settings: AppSettings = SingleInstance.get(this)
             settings.show()
             settings.save(this)
         }
@@ -47,11 +46,5 @@ class MainActivity : AppCompatActivity() {
     @StaticPref
     private class AppSettings : SingleInstance(), Serializable {
         var startDate: Long? = null
-
-        companion object {
-            fun getInstance(context: Context): AppSettings {
-                return getInstance(context, AppSettings::class.java)
-            }
-        }
     }
 }
