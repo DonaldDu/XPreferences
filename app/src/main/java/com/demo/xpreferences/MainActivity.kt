@@ -16,13 +16,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         buttonInner.setOnClickListener {
-            val settings: AppSettings = XPreferences.get(this) ?: AppSettings()//读取配置
+            val settings: AppSettings = XPreferences.get(this)//读取配置
             settings.show()
             XPreferences.put(this, settings)//存储配置
         }
 
         buttonStatic.setOnClickListener {
-            val settings: AppSettings = XPreferences.get(this, true) ?: AppSettings()//读取SD卡配置
+            val settings: AppSettings = XPreferences.get(this, true)//读取SD卡配置
             settings.show()
             XPreferences.put(this, settings, true)//存储配置到SD卡
         }

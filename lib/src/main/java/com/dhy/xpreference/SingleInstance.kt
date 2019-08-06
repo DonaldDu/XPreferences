@@ -27,16 +27,6 @@ abstract class SingleInstance {
             var instance = it[cls.name]
             if (instance == null) {
                 instance = XPreferences.get(context, cls, isStatic(cls))
-                if (instance == null) {
-                    try {
-                        val constructor = cls.getConstructor()
-                        if (!constructor.isAccessible) constructor.isAccessible = true
-                        instance = constructor.newInstance()
-                    } catch (e: Exception) {
-                        throw IllegalStateException("SingleInstance newInstance error: " + cls.name, e)
-                    }
-
-                }
                 it[cls.name] = instance!!
             }
             return cls.cast(instance)!!

@@ -9,15 +9,15 @@ import com.dhy.xpreference.util.IPreferenceFileNameGenerator
 import com.dhy.xpreference.util.ObjectConverter
 
 object XPreferences : IPreferences {
-    inline fun <reified T> get(context: Context, isStatic: Boolean = false): T? {
+    inline fun <reified T> get(context: Context, isStatic: Boolean = false): T {
         return get(context, T::class.java.name, T::class.java, isStatic)
     }
 
-    inline fun <reified T> get(context: Context, key: Enum<*>, isStatic: Boolean = false): T? {
+    inline fun <reified T> get(context: Context, key: Enum<*>, isStatic: Boolean = false): T {
         return get(context, key.keyName(), T::class.java, isStatic)
     }
 
-    inline fun <reified T> get(context: Context, key: String, isStatic: Boolean = false): T? {
+    inline fun <reified T> get(context: Context, key: String, isStatic: Boolean = false): T {
         return get(context, key, T::class.java, isStatic)
     }
 
@@ -70,15 +70,15 @@ interface IPreferences {
 
     fun putString(context: Context, key: String, obj: String?, isStatic: Boolean = false)
 
-    fun <T> get(context: Context, cls: Class<T>, isStatic: Boolean = false): T? {
+    fun <T> get(context: Context, cls: Class<T>, isStatic: Boolean = false): T {
         return get(context, cls.name, cls, isStatic)
     }
 
-    fun <T> get(context: Context, key: String, cls: Class<T>, isStatic: Boolean = false): T? {
+    fun <T> get(context: Context, key: String, cls: Class<T>, isStatic: Boolean = false): T {
         val json = getString(context, key, isStatic)
         return if (json != null) {
             getConverter(context).string2object(json, cls)
-        } else null
+        } else createNewInstance(cls)
     }
 
     private fun getConverter(context: Context): ObjectConverter {
@@ -87,4 +87,14 @@ interface IPreferences {
     }
 
     fun getString(context: Context, key: String, isStatic: Boolean = false): String?
+}
+
+private fun <T> createNewInstance(cls: Class<T>): T {
+    try {
+        val constructor = cls.getConstructor()
+        if (!constructor.isAccessible) constructor.isAccessible = true
+        return constructor.newInstance()
+    } catch (e: Exception) {
+        throw IllegalStateException("newInstance error: ${cls.name}", e)
+    }
 }
