@@ -7,24 +7,23 @@ import com.dhy.xpreference.IPreferences
 import com.dhy.xpreference.util.IPreferenceFileNameGenerator
 
 class InnerPreferences(private val generator: IPreferenceFileNameGenerator) : IPreferences {
-    override fun putString(context: Context, key: String, obj: String?, isStatic: Boolean) {
+    override fun putString(context: Context, key: Class<*>, obj: String?, isStatic: Boolean) {
+        val pref = getSharedPreferences(context, key)
         if (obj != null) {
-            getSharedPreferences(context, key)
-                .edit()
-                .apply {
-                    putString(key, obj)
-                    apply()
-                }
+            pref.edit().apply {
+                putString(key.name, obj)
+                apply()
+            }
         } else {
-            getSharedPreferences(context, key).edit().clear().apply()
+            pref.edit().clear().apply()
         }
     }
 
-    override fun getString(context: Context, key: String, isStatic: Boolean): String? {
-        return getSharedPreferences(context, key).getString(key, null)
+    override fun getString(context: Context, key: Class<*>, isStatic: Boolean): String? {
+        return getSharedPreferences(context, key).getString(key.name, null)
     }
 
-    private fun getSharedPreferences(context: Context, key: String): SharedPreferences {
+    private fun getSharedPreferences(context: Context, key: Class<*>): SharedPreferences {
         val preferencesName = generator.generate(context, key)
         return context.getSharedPreferences(preferencesName, Activity.MODE_PRIVATE)
     }

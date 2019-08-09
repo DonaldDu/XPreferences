@@ -18,10 +18,6 @@ val FILE_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BE
     arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 }
 
-fun Enum<*>.keyName(): String {
-    return "${javaClass.name}_$name"
-}
-
 fun Context.hasFilePermission(): Boolean {
     return FILE_PERMISSIONS.find {
         ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
