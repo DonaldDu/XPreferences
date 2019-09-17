@@ -5,8 +5,8 @@ import com.dhy.xpreference.MultUserData
 
 interface IPreferenceFileNameGenerator {
     /**
-     *
      * multiple user can be "prefClass.name-$uid"
+     * @return fileName or absolutePath, absolutePath only for StaticPreferences
      * */
     fun generate(context: Context, prefClass: Class<*>): String {
         return prefClass.name

@@ -28,9 +28,12 @@ class StaticPreferences(private val generator: IPreferenceFileNameGenerator) :
     }
 
     private fun getPrefsFile(context: Context, key: Class<*>): File {
-        val root = context.staticDirectory
         val preferencesName = generator.generate(context, key)
-        val file = File(root, "prefs" + File.separator + preferencesName)
+        val file = if (preferencesName.startsWith(File.separator)) {
+            File(preferencesName)
+        } else {
+            File(context.staticDirectory, "prefs" + File.separator + preferencesName)
+        }
         file.parentFile.apply {
             if (!exists()) mkdirs()
         }
