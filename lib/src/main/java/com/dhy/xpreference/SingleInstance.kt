@@ -1,17 +1,19 @@
 package com.dhy.xpreference
 
 import android.content.Context
+import android.widget.Toast
 import com.dhy.xpreference.util.StaticPref
+import com.dhy.xpreference.util.StaticPrefDebugOnly
 import java.util.*
 
 abstract class SingleInstance {
 
     fun save(context: Context) {
-        XPreferences.put(context, this, isStatic(javaClass))
+        save(context, this)
     }
 
     fun clearBuffer() {
-        it.remove(javaClass.name)
+        clearBuffer(javaClass)
     }
 
     companion object {
@@ -23,17 +25,42 @@ abstract class SingleInstance {
         }
 
         @JvmStatic
+        fun save(context: Context, data: Any) {
+            XPreferences.put(context, data, isStaticXPref(context, data.javaClass))
+        }
+
+        @JvmStatic
         fun <T> get(context: Context, cls: Class<T>): T {
             var instance = it[cls.name]
             if (instance == null) {
-                instance = XPreferences.get(context, cls, isStatic(cls))
+                instance = XPreferences.get(context, cls, isStaticXPref(context, cls))
                 it[cls.name] = instance!!
             }
             return cls.cast(instance)!!
         }
 
-        private fun isStatic(cls: Class<*>): Boolean {
-            return cls.isAnnotationPresent(StaticPref::class.java)
+        @JvmStatic
+        fun <T> get(cls: Class<T>): T? {
+            val instance = it[cls.name]
+            return cls.cast(instance)
+        }
+
+        @JvmStatic
+        fun clearBuffer(cls: Class<*>) {
+            it.remove(cls.name)
         }
     }
+}
+
+fun isStaticXPref(context: Context, cls: Class<*>): Boolean {
+    val isStatic = if (XPreferencesSetting.debug && cls.isAnnotationPresent(StaticPrefDebugOnly::class.java)) true
+    else cls.isAnnotationPresent(StaticPref::class.java)
+    return if (isStatic) {
+        if (context.hasFilePermission()) true
+        else {
+            val msg = "no file permissions for static preferences"
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+            false
+        }
+    } else false
 }

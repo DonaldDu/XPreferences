@@ -44,8 +44,9 @@ class MainActivity : AppCompatActivity() {
         startDate = new
     }
 
-    @StaticPref
-    private class AppSettings : SingleInstance(), Serializable, MultUserData {
-        var startDate: Long? = null
-    }
+}
+
+@StaticPref
+private class AppSettings : SingleInstance(), Serializable, MultUserData {
+    var startDate: Long? = null
 }

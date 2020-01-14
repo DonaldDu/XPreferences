@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.dhy.xpreference.util.GsonConverter;
 import com.dhy.xpreference.util.IPreferenceFileNameGenerator;
 import com.dhy.xpreference.util.ObjectConverter;
@@ -15,6 +16,7 @@ import java.lang.reflect.Constructor;
 public class XPreferencesSetting {
     static ObjectConverter converter;
     static IPreferenceFileNameGenerator generator;
+    public static boolean debug = false;
 
     /**
      * @param converter we'll get instance with class.newInstance()
