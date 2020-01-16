@@ -1,6 +1,8 @@
 package com.dhy.xpreference
 
+import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import com.dhy.xpreference.preferences.InnerPreferences
@@ -34,6 +36,10 @@ object XPreferences : IPreferences {
         } else InnerPreferences(generator)
     }
 
+    inline fun <reified T> get(context: Context, key: Enum<*>): T? {
+        return get(context, key, T::class.java)
+    }
+
     private fun getGenerator(context: Context): IPreferenceFileNameGenerator {
         if (XPreferencesSetting.generator == null) XPreferencesSetting.init(context)
         return XPreferencesSetting.generator
@@ -59,6 +65,29 @@ interface IPreferences {
         return if (json != null) {
             getConverter(context).string2object(json, cls)
         } else createNewInstance(cls)
+    }
+
+    private fun getSharedPreferences(context: Context, key: Enum<*>): SharedPreferences {
+        return context.getSharedPreferences(key.javaClass.name, Activity.MODE_PRIVATE)
+    }
+
+    fun <T> get(context: Context, key: Enum<*>, cls: Class<T>): T? {
+        val json = getSharedPreferences(context, key)
+            .getString(key.name, null)
+        return if (json != null) {
+            getConverter(context).string2object(json, cls)
+        } else null
+    }
+
+    fun put(context: Context, key: Enum<*>, obj: Any?) {
+        val json = if (obj != null) {
+            getConverter(context).objectToString(obj)
+        } else null
+
+        getSharedPreferences(context, key)
+            .edit()
+            .putString(key.name, json)
+            .apply()
     }
 
     fun getString(context: Context, key: Class<*>, isStatic: Boolean = false): String?
