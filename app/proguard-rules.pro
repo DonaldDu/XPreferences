@@ -22,7 +22,3 @@
 #-keepclassmembers class * implements java.io.Serializable{
 #   <fields>;
 # }
- -keep class com.dhy.xpreference.**
- -keepclassmembers class com.demo.xpreferences.AppSettings{
-       <fields>;
- }

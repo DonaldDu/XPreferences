@@ -1,8 +1,9 @@
 package com.dhy.xpreference.util
 
 import android.content.Context
+import androidx.annotation.Keep
 import com.google.gson.Gson
-
+@Keep
 interface ObjectConverter {
     /**
      * init once after newInstance

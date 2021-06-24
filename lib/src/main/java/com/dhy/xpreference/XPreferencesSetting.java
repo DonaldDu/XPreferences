@@ -3,8 +3,8 @@ package com.dhy.xpreference;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.dhy.xpreference.util.GsonConverter;
 import com.dhy.xpreference.util.IPreferenceFileNameGenerator;

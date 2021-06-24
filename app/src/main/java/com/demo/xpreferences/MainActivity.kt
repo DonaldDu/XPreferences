@@ -1,11 +1,8 @@
 package com.demo.xpreferences
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import com.dhy.xpreference.MultUserData
-import com.dhy.xpreference.SingleInstance
-import com.dhy.xpreference.XPreferences
-import com.dhy.xpreference.requestFilePermission
+import androidx.appcompat.app.AppCompatActivity
+import com.dhy.xpreference.*
 import com.dhy.xpreference.util.StaticPref
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.Serializable
@@ -43,10 +40,9 @@ class MainActivity : AppCompatActivity() {
         tv.text = "old $startDate, new $new"
         startDate = new
     }
-
 }
 
 @StaticPref
-private class AppSettings : SingleInstance(), Serializable, MultUserData {
+private class AppSettings : SingleInstance(), Serializable, MultUserData, XPref {
     var startDate: Long? = null
 }

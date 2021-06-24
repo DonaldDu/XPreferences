@@ -3,13 +3,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
-        versionName "0.9.9"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName "0.9.9.1"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        consumerProguardFiles 'proguard-rules.pro'
     }
 
     buildTypes {
@@ -20,26 +21,15 @@ android {
     }
 }
 
-apply plugin: 'com.novoda.bintray-release'
-publish {
-    userOrg = 'user'
-    groupId = 'com.github.DonaldDu'
-    artifactId = 'XPreferences'
-    publishVersion = android.defaultConfig.versionName
-    desc = 'desc'
-    website = 'website'
-}
-
+mavenPublish("com.github.DonaldDu:${rootProject.name}:10.0.0")
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
 
-    compileOnly 'com.android.support:appcompat-v7:28.0.0'
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation 'commons-io:commons-io:2.6'
+    implementation 'commons-io:commons-io:2.8.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 }
