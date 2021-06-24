@@ -3,6 +3,7 @@ package com.dhy.xpreference;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -48,7 +49,7 @@ public class XPreferencesSetting {
     }
 
     @Nullable
-    private static String getUtilClassName(Context context, Class utilInterface) {
+    private static String getUtilClassName(Context context, Class<?> utilInterface) {
         return getSharedPreferences(context)
                 .getString(utilInterface.getName(), null);
     }

@@ -20,7 +20,7 @@ abstract class SingleInstance {
         @Transient
         private val it = WeakHashMap<String, Any>()
 
-        inline fun <reified T : XPref> get(context: Context): T {
+        inline fun <reified T> get(context: Context): T {
             return get(context, T::class.java)
         }
 
@@ -30,7 +30,7 @@ abstract class SingleInstance {
         }
 
         @JvmStatic
-        fun <T : XPref> get(context: Context, cls: Class<T>): T {
+        fun <T> get(context: Context, cls: Class<T>): T {
             var instance = it[cls.name]
             if (instance == null) {
                 instance = XPreferences.get(context, cls, isStaticXPref(context, cls))

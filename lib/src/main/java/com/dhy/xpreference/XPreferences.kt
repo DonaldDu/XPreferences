@@ -9,11 +9,10 @@ import com.dhy.xpreference.preferences.InnerPreferences
 import com.dhy.xpreference.preferences.StaticPreferences
 import com.dhy.xpreference.util.IPreferenceFileNameGenerator
 import com.dhy.xpreference.util.ObjectConverter
-import com.google.gson.reflect.TypeToken
 
 
 object XPreferences : IPreferences {
-    inline fun <reified T : XPref> get(context: Context, isStatic: Boolean = false): T {
+    inline fun <reified T> get(context: Context, isStatic: Boolean = false): T {
         return get(context, T::class.java, isStatic)
     }
 
@@ -39,7 +38,6 @@ object XPreferences : IPreferences {
     }
 
     inline fun <reified T> get(context: Context, key: Enum<*>): T? {
-        val type = object : TypeToken<T>() {}.type
         return get(context, key, T::class.java)
     }
 
@@ -63,7 +61,7 @@ interface IPreferences {
 
     fun putString(context: Context, key: Class<*>, obj: String?, isStatic: Boolean = false)
 
-    fun <T : XPref> get(context: Context, cls: Class<T>, isStatic: Boolean = false): T {
+    fun <T> get(context: Context, cls: Class<T>, isStatic: Boolean = false): T {
         val json = getString(context, cls, isStatic)
         return if (json != null) {
             getConverter(context).string2object(json, cls)
@@ -101,7 +99,7 @@ interface IPreferences {
     }
 }
 
-private fun <T : XPref> createNewInstance(cls: Class<T>): T {
+private fun <T> createNewInstance(cls: Class<T>): T {
     try {
         val constructor = cls.getConstructor()
         if (!constructor.isAccessible) constructor.isAccessible = true
