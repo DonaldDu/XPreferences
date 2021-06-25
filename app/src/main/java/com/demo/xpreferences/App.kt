@@ -24,9 +24,11 @@ class App : Application() {
 
 private class MultUserFileNameGenerator : IPreferenceFileNameGenerator {
     override fun generate(context: Context, prefClass: Class<*>): String {
-        return if (isMultUserData(prefClass)) {
-            val uid = App.getUserId(context)
-            "${prefClass.name}-$uid"
-        } else prefClass.name
+        return if (isMultUserData(prefClass)) "${prefClass.name}-${getUserId(context)}"
+        else prefClass.name
+    }
+
+    private fun getUserId(context: Context): Any {
+        return App.getUserId(context)
     }
 }

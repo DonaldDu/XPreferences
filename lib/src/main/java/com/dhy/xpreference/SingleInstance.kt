@@ -6,7 +6,7 @@ import com.dhy.xpreference.util.StaticPref
 import com.dhy.xpreference.util.StaticPrefDebugOnly
 import java.util.*
 
-abstract class SingleInstance {
+abstract class SingleInstance : XPref {
 
     fun save(context: Context) {
         save(context, this)

@@ -20,6 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepclassmembers class * implements java.io.Serializable {<fields>;}
+-keep class * implements com.dhy.xpreference.XPref{<fields>;}
 -keep class * implements com.dhy.xpreference.util.IPreferenceFileNameGenerator
 -keep class * implements com.dhy.xpreference.util.ObjectConverter

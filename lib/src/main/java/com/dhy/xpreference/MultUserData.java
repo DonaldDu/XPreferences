@@ -1,4 +1,4 @@
 package com.dhy.xpreference;
 
-public interface MultUserData {
+public interface MultUserData extends XPref {
 }

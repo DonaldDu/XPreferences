@@ -1,14 +1,12 @@
 package com.demo.xpreferences
 
 import android.os.Bundle
-import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import com.dhy.xpreference.MultUserData
 import com.dhy.xpreference.SingleInstance
 import com.dhy.xpreference.XPreferences
 import com.dhy.xpreference.requestFilePermission
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,7 +43,6 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-@Keep
-private class AppSettings : SingleInstance(), Serializable, MultUserData {
+private class AppSettings : SingleInstance(), MultUserData {
     var startDate: Long? = null
 }
