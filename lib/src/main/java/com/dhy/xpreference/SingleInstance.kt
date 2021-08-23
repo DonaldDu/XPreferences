@@ -46,8 +46,9 @@ abstract class SingleInstance : XPref {
         }
 
         @JvmStatic
-        fun clearBuffer(cls: Class<*>) {
-            it.remove(cls.name)
+        fun clearBuffer(cls: Class<*>? = null) {
+            if (cls != null) it.remove(cls.name)
+            else it.clear()
         }
     }
 }
